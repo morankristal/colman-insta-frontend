@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { register} from '../Services/autoService'; // ייבוא השירות
 
 const RegisterForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -12,13 +12,9 @@ const RegisterForm: React.FC = () => {
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', {
-                username,
-                email,
-                password,
-                profilePicture,
-            });
-            console.log('Register successful:', response.data);
+            const userData = { username, email, password, profilePicture };
+            const response = await register(userData);
+            console.log('Register successful:', response);
             alert('Register successful!');
         } catch (error: any) {
             if (error.response) {

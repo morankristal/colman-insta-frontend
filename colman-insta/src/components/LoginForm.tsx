@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import {login} from "../Services/autoService.ts";
 
 const LoginForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -15,11 +15,8 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/auth/login/', {
-                username,
-                password,
-            });
-            console.log('Login successful:', response.data);
+            const response = await login( username, password );
+            console.log('Login successful:', response);
             alert('Login successful!');
             navigate("/homePage");
         } catch (error: any) {
