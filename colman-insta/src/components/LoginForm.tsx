@@ -21,6 +21,7 @@ const LoginForm: React.FC = () => {
             });
             console.log('Login successful:', response.data);
             alert('Login successful!');
+            navigate("/homePage");
         } catch (error: any) {
             if (error.response) {
                 console.error('Login failed:', error.response.data.message);
@@ -57,8 +58,8 @@ const LoginForm: React.FC = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
-                    <button onClick={handleRegisterClick} className="btn btn-link w-100">אם אינך רשום, הירשם כאן</button>
+                    <button type="submit"  className="btn btn-primary w-100 mb-3">Login</button>
+                    <button onClick={handleRegisterClick} className="btn btn-link w-100">If you are not registered, register here</button>
                 </form>
             </div>
         </div>
