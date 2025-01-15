@@ -1,5 +1,5 @@
 import apiClient from "./api-client";
-import { UserData } from "../DataStructure";  // הנחה שמבנה ה-UserData מוגדר בקובץ DataStructure
+import { UserData } from "../types/userTypes.ts"  // הנחה שמבנה ה-UserData מוגדר בקובץ DataStructure
 
 export const getAllUsers = (): Promise<UserData[]> => {
     return new Promise<UserData[]>((resolve, reject) => {

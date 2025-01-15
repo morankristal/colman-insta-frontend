@@ -18,6 +18,7 @@ const LoginForm: React.FC = () => {
             const response = await login( username, password );
             console.log('Login successful:', response);
             alert('Login successful!');
+            console.log("hi" ,document.cookie);
             navigate("/homePage");
         } catch (error: any) {
             if (error.response) {

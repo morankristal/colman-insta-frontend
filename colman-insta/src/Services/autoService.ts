@@ -1,5 +1,5 @@
 import apiClient from "./api-client";
-import {TokenResponse, UserData} from "../DataStructure.ts";
+import {TokenResponse, UserData} from "../types/userTypes.ts"
 
 
 export const register = (data: UserData): Promise<UserData> => {
@@ -17,7 +17,7 @@ export const register = (data: UserData): Promise<UserData> => {
 export const login = (username: string, password: string): Promise<TokenResponse> => {
     return new Promise((resolve, reject) => {
         apiClient
-            .post<TokenResponse>("auth/login", { username, password }) // מעביר אובייקט במקום שני פרמטרים
+            .post<TokenResponse>("auth/login", { username, password }) // הוספתי withCredentials
             .then((res) => resolve(res.data))
             .catch((err) => {
                 console.error("Error in logging in: ", err);

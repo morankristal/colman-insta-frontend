@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
 import HomePage from "./pages/HomePage.tsx";
 import UserProfilePage from "./pages/UserProfilePage.tsx";
+import EditProfile from "./components/EditProfile.tsx";
 
 // יצירת QueryClient
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ function App() {
                     <Route path="/register" element={<RegisterForm />} />
                     <Route path="/homePage" element={<HomePage />} />
                     <Route path="/user/:username" element={<UserProfilePage />} />
+                    <Route path="/edit-profile/:id" element={<EditProfile />} />
                 </Routes>
             </BrowserRouter>
         </QueryClientProvider>

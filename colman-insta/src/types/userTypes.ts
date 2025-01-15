@@ -2,10 +2,9 @@ export interface UserData {
     _id?: string;
     username: string;
     email: string;
-    password: string;
+    password?: string;
     profilePicture: string;
     refreshToken?: string[];
-
 }
 
 
