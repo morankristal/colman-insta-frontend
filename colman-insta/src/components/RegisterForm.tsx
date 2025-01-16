@@ -38,7 +38,7 @@ const RegisterForm: React.FC = () => {
 
     const handleBackToLogin = (e: React.MouseEvent) => {
         e.preventDefault();
-        navigate("/");
+        navigate("/login");
     };
 
     return (
