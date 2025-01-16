@@ -40,8 +40,8 @@ const EditProfile: React.FC = () => {
     const handleFormSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            await userService.updateUser({_id:id, ...formData}); // קריאה לשרת
-            navigate(`/user/${formData.username}`); // חזרה לפרופיל
+            await userService.updateUser({_id:id, ...formData});
+            navigate(`/user/${formData.username}`);
         } catch (err) {
             setError('Failed to update user data.');
         }
