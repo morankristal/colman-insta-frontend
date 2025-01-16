@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import autoService from "./autoService.ts";
+import autoService from "./authService.ts";
 
 function backEnv(): string {
     return process.env.NODE_ENV === 'production' ? 'https://node23.cs.colman.ac.il:80' : 'http://localhost:3000';
