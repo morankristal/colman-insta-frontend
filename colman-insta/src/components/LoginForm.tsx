@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import {login} from "../Services/authService.ts";
 
 const LoginForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -15,12 +15,11 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/auth/login/', {
-                username,
-                password,
-            });
-            console.log('Login successful:', response.data);
+            const response = await login( username, password );
+            console.log('Login successful:', response);
             alert('Login successful!');
+            console.log("hi" ,document.cookie);
+            navigate("/homePage");
         } catch (error: any) {
             if (error.response) {
                 console.error('Login failed:', error.response.data.message);
@@ -57,8 +56,8 @@ const LoginForm: React.FC = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
-                    <button onClick={handleRegisterClick} className="btn btn-link w-100">אם אינך רשום, הירשם כאן</button>
+                    <button type="submit"  className="btn btn-primary w-100 mb-3">Login</button>
+                    <button onClick={handleRegisterClick} className="btn btn-link w-100">If you are not registered, register here</button>
                 </form>
             </div>
         </div>

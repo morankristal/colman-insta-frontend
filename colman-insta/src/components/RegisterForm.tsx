@@ -1,24 +1,29 @@
 import React, { useState } from 'react';
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { register } from '../Services/authService.ts'; // ייבוא השירות
 
 const RegisterForm: React.FC = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [profilePicture, setProfilePicture] = useState('');
+    const [userDetails, setUserDetails] = useState({
+        username: '',
+        email: '',
+        password: '',
+        profilePicture: '',
+    });
     const navigate = useNavigate();
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setUserDetails((prevDetails) => ({
+            ...prevDetails,
+            [name]: value,
+        }));
+    };
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/auth/register', {
-                username,
-                email,
-                password,
-                profilePicture,
-            });
-            console.log('Register successful:', response.data);
+            const response = await register(userDetails); // שימוש בשירות
+            console.log('Register successful:', response);
             alert('Register successful!');
         } catch (error: any) {
             if (error.response) {
@@ -33,7 +38,7 @@ const RegisterForm: React.FC = () => {
 
     const handleBackToLogin = (e: React.MouseEvent) => {
         e.preventDefault();
-        navigate("/");
+        navigate("/login");
     };
 
     return (
@@ -45,9 +50,10 @@ const RegisterForm: React.FC = () => {
                         <label className="form-label">Username</label>
                         <input
                             type="text"
+                            name="username"
                             className="form-control"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={userDetails.username}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
@@ -55,9 +61,10 @@ const RegisterForm: React.FC = () => {
                         <label className="form-label">Email</label>
                         <input
                             type="email"
+                            name="email"
                             className="form-control"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            value={userDetails.email}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
@@ -65,9 +72,10 @@ const RegisterForm: React.FC = () => {
                         <label className="form-label">Password</label>
                         <input
                             type="password"
+                            name="password"
                             className="form-control"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
+                            value={userDetails.password}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
@@ -75,9 +83,10 @@ const RegisterForm: React.FC = () => {
                         <label className="form-label">Profile Picture URL</label>
                         <input
                             type="url"
+                            name="profilePicture"
                             className="form-control"
-                            value={profilePicture}
-                            onChange={(e) => setProfilePicture(e.target.value)}
+                            value={userDetails.profilePicture}
+                            onChange={handleInputChange}
                             required
                         />
                     </div>
