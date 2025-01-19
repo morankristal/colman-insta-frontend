@@ -2,7 +2,7 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {jwtDecode} from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
-import userService from '../Services/usersService';
+import userService from '../../Services/usersService.ts';
 
 interface UserProfileProps {
     username: string;

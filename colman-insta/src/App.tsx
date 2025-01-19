@@ -3,11 +3,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import HomePage from "./pages/HomePage.tsx";
 import UserProfilePage from "./pages/UserProfilePage.tsx";
-import EditProfile from "./components/EditProfile.tsx";
+import EditProfile from "./components/users/EditProfile.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
-import CreatePost from "./components/CreatePost.tsx";
+import CreatePost from "./components/posts/CreatePost.tsx";
 
 // יצירת QueryClient
 const queryClient = new QueryClient();

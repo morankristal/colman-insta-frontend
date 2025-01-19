@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createPost } from "../Services/postsService"; // הייבוא של הפונקציה להעלאת פוסט
+import { createPost } from "../../Services/postsService.ts"; // הייבוא של הפונקציה להעלאת פוסט
 
 const CreatePost: React.FC = () => {
     const [title, setTitle] = useState<string>("");

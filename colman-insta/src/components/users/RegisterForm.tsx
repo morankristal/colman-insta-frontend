@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { register } from '../Services/authService.ts'; // ייבוא השירות
+import { register } from '../../Services/authService.ts'; // ייבוא השירות
 
 const RegisterForm: React.FC = () => {
     const [userDetails, setUserDetails] = useState({

@@ -1,5 +1,5 @@
 import React from 'react';
-import LoginForm from '../components/LoginForm';
+import LoginForm from '../components/users/LoginForm.tsx';
 import {isAuthenticated} from "../utils/isAuthenticated.ts";
 import {Navigate} from "react-router-dom";
 

@@ -1,5 +1,5 @@
 import apiClient from "./api-client";
-import { PostData } from "../types/postTypes.ts"; // Assume PostData structure is defined here
+import { PostData } from "../types/postTypes.ts";
 
 export const getAllPosts = (): Promise<PostData[]> => {
     return new Promise<PostData[]>((resolve, reject) => {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import userService from '../Services/usersService';
+import userService from '../../Services/usersService.ts';
 
 const EditProfile: React.FC = () => {
     const { id } = useParams<{ id: string }>();
