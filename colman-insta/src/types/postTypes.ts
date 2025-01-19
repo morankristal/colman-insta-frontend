@@ -7,3 +7,9 @@ export interface PostData {
     likes: string[],
     image: string;
 }
+export interface PostUpadateData {
+    _id?: string,
+    title: string,
+    content: string,
+    image: string;
+}

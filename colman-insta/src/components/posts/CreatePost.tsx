@@ -29,6 +29,8 @@ const CreatePost: React.FC = () => {
         }
     };
 
+
+
     return (
         <div className="container mt-5">
             <h1 className="mb-4">Create New Post</h1>

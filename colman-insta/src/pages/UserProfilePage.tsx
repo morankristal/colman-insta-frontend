@@ -4,6 +4,8 @@ import UserProfile from '../components/users/UserProfile.tsx';
 import { useQuery } from '@tanstack/react-query';
 import userService from '../Services/usersService.ts';
 import UserPosts from '../components/posts/UserPosts.tsx';
+import 'bootstrap-icons/font/bootstrap-icons.css';
+
 
 const UserProfilePage: React.FC = () => {
     const { username } = useParams();

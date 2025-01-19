@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 import userService from "../Services/usersService";
 import SearchBar from "../components/SearchBar";
 import PostsLoader from "../components/posts/PostsLoader.tsx";
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface DecodedToken {
     _id: string;

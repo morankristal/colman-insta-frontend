@@ -8,6 +8,7 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import CreatePost from "./components/posts/CreatePost.tsx";
+import EditPost from "./components/posts/EditPost.tsx";
 
 // יצירת QueryClient
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ function App() {
                         <Route path="/user/:username" element={<UserProfilePage />} />
                         <Route path="/edit-profile/:id" element={<EditProfile />} />
                         <Route path="/create-post" element={<CreatePost/>} />
+                        <Route path="/edit-post/:id" element={<EditPost/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>
