@@ -4,9 +4,16 @@ import userService from "../../Services/usersService";
 import { PostData } from "../../types/postTypes.ts";
 import { useNavigate } from "react-router-dom";
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import DeletePostButton from "./DeletePostButton";
+import {jwtDecode} from "jwt-decode";
 
 interface UserPostsProps {
     userId: string;
+}
+
+interface DecodedToken {
+    _id: string;
+    exp: number;
 }
 
 const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
@@ -15,6 +22,22 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
+
+    const getCurrentUserFromCookie = () => {
+        const cookies = document.cookie.split('; ');
+        const tokenCookie = cookies.find((cookie) => cookie.startsWith('accessToken='));
+        if (!tokenCookie) return null;
+
+        const token = tokenCookie.split('=')[1];
+        try {
+            return jwtDecode<DecodedToken>(token);
+        } catch (error) {
+            console.error('Failed to decode token:', error);
+            return null;
+        }
+    };
+
+    const currentUser = getCurrentUserFromCookie();
 
     useEffect(() => {
         const fetchUserPosts = async () => {
@@ -59,16 +82,21 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
                         <div key={post._id} className="col">
                             <div className="card h-100">
                                 <div className="card-header d-flex justify-content-between align-items-center">
-                                    {post.sender === userId && (
-                                        <button
-                                            className="btn btn-link text-primary p-0 m-0"
-                                            onClick={() => navigate(`/edit-post/${post._id}`)}
-                                        >
-                                            <i
-                                                className="bi bi-pencil-square"
-                                                style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                            ></i>
-                                        </button>
+                                    {currentUser && currentUser._id === post.sender && (
+                                        <div>
+                                            <button
+                                                className="btn btn-link text-primary p-0 m-0"
+                                                onClick={() => navigate(`/edit-post/${post._id}`)}
+                                            >
+                                                <i
+                                                    className="bi bi-pencil-square"
+                                                    style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                                                ></i>
+                                            </button>
+                                            {post._id && (
+                                                <DeletePostButton postId={post._id} setUserPosts={setUserPosts} />
+                                            )}
+                                        </div>
                                     )}
                                     <h5 className="card-title m-0">{post.title}</h5>
                                 </div>

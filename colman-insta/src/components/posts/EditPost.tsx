@@ -6,7 +6,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 const EditPost: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate(); // הוספת useNavigate כדי לנווט חזרה
+    const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
         title: "",
@@ -25,7 +25,7 @@ const EditPost: React.FC = () => {
                     setFormData({
                         title: post.title,
                         content: post.content,
-                        image: post.image || "", // נשמור את התמונה הישנה אם יש
+                        image: post.image || "",
                     });
                 }
                 setIsLoading(false);
@@ -53,8 +53,6 @@ const EditPost: React.FC = () => {
         e.preventDefault();
         try {
             const updatedPost = { _id: id, ...formData };
-
-            // אם נבחר קובץ חדש, נוסיף אותו לעדכון
             const formDataToSend = new FormData();
             formDataToSend.append("title", updatedPost.title);
             formDataToSend.append("content", updatedPost.content);
@@ -66,7 +64,7 @@ const EditPost: React.FC = () => {
 
             await postService.updatePost(id!, formDataToSend);
 
-            navigate(-1); // חזרה לדף הקודם אחרי שמירה
+            navigate(-1);
         } catch (err) {
             setError("Failed to update post.");
         }

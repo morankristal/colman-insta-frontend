@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import { createPost } from "../../Services/postsService.ts"; // הייבוא של הפונקציה להעלאת פוסט
+import { createPost } from "../../Services/postsService.ts";
+import {useNavigate} from "react-router-dom";
 
 const CreatePost: React.FC = () => {
     const [title, setTitle] = useState<string>("");
     const [content, setContent] = useState<string>("");
     const [image, setImage] = useState<File | null>(null);
+    const navigate = useNavigate();
+
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) setImage(e.target.files[0]);
@@ -21,6 +24,7 @@ const CreatePost: React.FC = () => {
             try {
                 const newPost = await createPost(formData);
                 console.log("Post created: ", newPost);
+                navigate(-1);
             } catch (err) {
                 console.error("Error creating post: ", err);
             }
