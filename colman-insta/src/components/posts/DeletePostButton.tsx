@@ -15,7 +15,7 @@ const DeletePostButton: React.FC<DeletePostButtonProps> = ({ postId, setUserPost
             await postService.deletePost(postId);
             setUserPosts((prevPosts: any) => prevPosts.filter((post: any) => post._id !== postId));
             alert("Post deleted successfully.");
-            navigate(-1); // Redirect to the user's profile page or posts list
+            navigate(-1);
         } catch (err) {
             console.error("Error deleting post:", err);
             alert("Failed to delete the post.");

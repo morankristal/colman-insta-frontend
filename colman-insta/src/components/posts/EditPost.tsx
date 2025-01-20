@@ -15,7 +15,7 @@ const EditPost: React.FC = () => {
     });
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
-    const [imageFile, setImageFile] = useState<File | null>(null); // משתנה לשמירת הקובץ החדש
+    const [imageFile, setImageFile] = useState<File | null>(null);
 
     useEffect(() => {
         const fetchPostData = async () => {
@@ -57,9 +57,9 @@ const EditPost: React.FC = () => {
             formDataToSend.append("title", updatedPost.title);
             formDataToSend.append("content", updatedPost.content);
             if (imageFile) {
-                formDataToSend.append("image", imageFile); // נשלח את הקובץ החדש
+                formDataToSend.append("image", imageFile);
             } else {
-                formDataToSend.append("image", formData.image); // אם לא נבחר קובץ חדש, נשאיר את התמונה הקיימת
+                formDataToSend.append("image", formData.image);
             }
 
             await postService.updatePost(id!, formDataToSend);
@@ -117,7 +117,7 @@ const EditPost: React.FC = () => {
                         onChange={handleFileChange}
                     />
                     {formData.image && !imageFile && (
-                        <p>Current Image: {formData.image}</p> // מציג את התמונה הקיימת אם לא נבחר קובץ חדש
+                        <p>Current Image: {formData.image}</p>
                     )}
                 </div>
                 <button type="submit" className="btn btn-primary">

@@ -14,19 +14,13 @@ const PostsLoader: React.FC = () => {
         const fetchPosts = async () => {
             try {
                 const allPosts = await getAllPosts();
-
-                // מיון הפוסטים לפי תאריך יצירה
                 const sortedPosts = allPosts.sort(
                     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 );
 
                 setPosts(sortedPosts);
-
-                // שליפת IDs של כל השולחים בפוסטים
                 const senderIds = sortedPosts.map((post) => post.sender);
                 const uniqueSenderIds = Array.from(new Set(senderIds));
-
-                // שליפת שמות השולחים
                 const senderNames: { [key: string]: string } = {};
                 for (const senderId of uniqueSenderIds) {
                     try {

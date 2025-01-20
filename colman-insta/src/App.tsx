@@ -10,12 +10,10 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import CreatePost from "./components/posts/CreatePost.tsx";
 import EditPost from "./components/posts/EditPost.tsx";
 
-// יצירת QueryClient
 const queryClient = new QueryClient();
 
 function App() {
     return (
-        // עטיפה ב-QueryClientProvider
         <QueryClientProvider client={queryClient}>
             <BrowserRouter>
                 <Routes>
