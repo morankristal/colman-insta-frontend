@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import userService from "../Services/usersService";
+import authService from "../Services/authService"; // ייבוא שירות האימות
 import SearchBar from "../components/SearchBar";
 import PostsLoader from "../components/posts/PostsLoader.tsx";
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -41,6 +42,25 @@ const HomePage: React.FC = () => {
         fetchLoggedInUser();
     }, []);
 
+    const handleLogout = async () => {
+        try {
+            const refreshToken = Cookies.get("refreshToken"); // קבלת ריפרש טוקן
+            if (refreshToken) {
+                await authService.logout(refreshToken); // קריאה לפונקציית logout עם ה-refresh token
+            }
+
+            // מחיקת הטוקנים מה-cookies
+            Cookies.remove("accessToken");
+            Cookies.remove("refreshToken");
+
+            // איפוס המשתמש המחובר וניתוב לעמוד ההתחברות
+            setLoggedInUser(null);
+            navigate("/login");
+        } catch (error) {
+            console.error("Error during logout:", error);
+        }
+    };
+
     const handleGoToProfile = () => {
         if (loggedInUser) {
             navigate(`/user/${loggedInUser.username}`);
@@ -51,32 +71,42 @@ const HomePage: React.FC = () => {
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
                 <div className="container-fluid">
-                    <div className="d-flex justify-content-between w-100">
+                    <div className="d-flex justify-content-between w-100 align-items-center">
                         <SearchBar
                             onSearch={(username) => console.log(`Searching for user: ${username}`)}
                         />
-                        {loggedInUser && (
-                            <button
-                                className="btn btn-light rounded-circle p-0"
-                                style={{
-                                    width: "50px",
-                                    height: "50px",
-                                    overflow: "hidden",
-                                }}
-                                onClick={handleGoToProfile}
-                            >
-                                <img
-                                    src={loggedInUser.profilePicture}
-                                    alt="Profile"
-                                    style={{
-                                        width: "100%",
-                                        height: "100%",
-                                        objectFit: "cover",
-                                        borderRadius: "50%",
-                                    }}
-                                />
-                            </button>
-                        )}
+                        <div className="d-flex align-items-center">
+                            {loggedInUser && (
+                                <>
+                                    <button
+                                        className="btn btn-light rounded-circle p-0 me-3"
+                                        style={{
+                                            width: "50px",
+                                            height: "50px",
+                                            overflow: "hidden",
+                                        }}
+                                        onClick={handleGoToProfile}
+                                    >
+                                        <img
+                                            src={loggedInUser.profilePicture}
+                                            alt="Profile"
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                objectFit: "cover",
+                                                borderRadius: "50%",
+                                            }}
+                                        />
+                                    </button>
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={handleLogout}
+                                    >
+                                        Logout
+                                    </button>
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
             </nav>
