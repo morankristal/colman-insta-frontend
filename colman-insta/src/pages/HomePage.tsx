@@ -3,9 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import userService from "../Services/usersService";
-import authService from "../Services/authService"; // ייבוא שירות האימות
 import SearchBar from "../components/SearchBar";
 import PostsLoader from "../components/posts/PostsLoader.tsx";
+import LogoutButton from "../components/users/LogoutButton";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 interface DecodedToken {
@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
             try {
                 const token = Cookies.get("accessToken");
                 if (token) {
-                    const decoded: DecodedToken = jwtDecode(token); // פענוח הטוקן
+                    const decoded: DecodedToken = jwtDecode(token);
                     const userId = decoded._id;
                     const user = await userService.getUserById(userId);
                     setLoggedInUser({
@@ -41,25 +41,6 @@ const HomePage: React.FC = () => {
 
         fetchLoggedInUser();
     }, []);
-
-    const handleLogout = async () => {
-        try {
-            const refreshToken = Cookies.get("refreshToken"); // קבלת ריפרש טוקן
-            if (refreshToken) {
-                await authService.logout(refreshToken); // קריאה לפונקציית logout עם ה-refresh token
-            }
-
-            // מחיקת הטוקנים מה-cookies
-            Cookies.remove("accessToken");
-            Cookies.remove("refreshToken");
-
-            // איפוס המשתמש המחובר וניתוב לעמוד ההתחברות
-            setLoggedInUser(null);
-            navigate("/login");
-        } catch (error) {
-            console.error("Error during logout:", error);
-        }
-    };
 
     const handleGoToProfile = () => {
         if (loggedInUser) {
@@ -98,12 +79,7 @@ const HomePage: React.FC = () => {
                                             }}
                                         />
                                     </button>
-                                    <button
-                                        className="btn btn-danger"
-                                        onClick={handleLogout}
-                                    >
-                                        Logout
-                                    </button>
+                                    <LogoutButton />
                                 </>
                             )}
                         </div>
