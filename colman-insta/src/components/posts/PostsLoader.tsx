@@ -5,6 +5,7 @@ import { PostData } from "../../types/postTypes.ts";
 import { Spinner } from "react-bootstrap";
 import PostCard from "./PostCard";
 import { jwtDecode } from "jwt-decode";
+import { FaHeart } from "react-icons/fa"; // אייקון לייק
 
 interface DecodedToken {
     _id: string;
@@ -13,9 +14,11 @@ interface DecodedToken {
 
 const PostsLoader: React.FC = () => {
     const [posts, setPosts] = useState<PostData[]>([]);
+    const [filteredPosts, setFilteredPosts] = useState<PostData[]>([]);
     const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
     const [loading, setLoading] = useState<boolean>(true);
     const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
+    const [showLikedPosts, setShowLikedPosts] = useState<boolean>(false);
 
     const getCurrentUserFromCookie = () => {
         const cookies = document.cookie.split('; ');
@@ -33,7 +36,7 @@ const PostsLoader: React.FC = () => {
 
     useEffect(() => {
         const currentUser = getCurrentUserFromCookie();
-        setCurrentUser(currentUser);  // עדכון מצב המשתמש המחובר
+        setCurrentUser(currentUser);
     }, []);
 
     useEffect(() => {
@@ -68,8 +71,29 @@ const PostsLoader: React.FC = () => {
         fetchPosts();
     }, []);
 
+    useEffect(() => {
+        if (currentUser && posts.length) {
+            const likedPosts = posts.filter((post) =>
+                post.likes.includes(currentUser._id)
+            );
+            setFilteredPosts(likedPosts);
+        }
+    }, [currentUser, posts]);
+
+    const handleFilterToggle = () => {
+        setShowLikedPosts((prev) => !prev);
+    };
+
     return (
         <div className="container mt-4">
+            <button
+                className={`btn ${showLikedPosts ? 'btn-outline-danger' : 'btn-outline-primary'} mb-3 d-flex align-items-center`}
+                onClick={handleFilterToggle}
+            >
+                <FaHeart className="me-2" />
+                {showLikedPosts ? "Show All Posts" : "Show Only Liked Posts"}
+            </button>
+
             {loading ? (
                 <div
                     className="d-flex justify-content-center align-items-center"
@@ -86,12 +110,13 @@ const PostsLoader: React.FC = () => {
                 </div>
             ) : (
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {posts.map((post) => (
+                    {(showLikedPosts ? filteredPosts : posts).map((post) => (
                         <PostCard
                             key={post._id}
                             post={post}
                             userNames={userNames}
                             currentUser={currentUser}
+                            setUserPosts={setPosts}
                         />
                     ))}
                 </div>

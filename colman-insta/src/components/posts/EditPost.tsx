@@ -46,7 +46,7 @@ const EditPost: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
-        setImageFile(file); // נשמור את הקובץ החדש שנבחר
+        setImageFile(file);
     };
 
     const handleFormSubmit = async (e: React.FormEvent) => {

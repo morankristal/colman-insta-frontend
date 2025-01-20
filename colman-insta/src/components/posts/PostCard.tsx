@@ -25,18 +25,17 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
     const handleLike = async () => {
         if (currentUser) {
             try {
-                if (isLiked) {
-                    await postService.likePost(post._id!, currentUser._id);
-                    setIsLiked(false);
-                } else {
-                    await postService.likePost(post._id!, currentUser._id);
-                    setIsLiked(true);
-                }
+                const newLikeState = !isLiked;
+                setIsLiked(newLikeState);
+                const updatedPost = { ...post, likes: newLikeState ? [...post.likes, currentUser._id] : post.likes.filter(id => id !== currentUser._id) };
+                setUserPosts && setUserPosts((prevPosts) => {
+                    return prevPosts.map((p) => p._id === post._id ? updatedPost : p);
+                });
+                await postService.likePost(post._id!, currentUser._id);
 
-                const updatedPosts = await postService.getPostsBySender(post.sender!);
-                setUserPosts && setUserPosts(updatedPosts);
             } catch (err) {
                 console.error("Error handling like:", err);
+                setIsLiked(isLiked);
             }
         }
     };
@@ -89,19 +88,18 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                     <div>
                         <i
                             className={`bi ${isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'} me-3`}
-                            style={{fontSize: "1.5rem", cursor: "pointer"}}
+                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
                             onClick={handleLike}
                         />
-                    <i
-                        className="bi bi-chat-left-text mr-3"
-                        style={{fontSize: "1.5rem", cursor: "pointer"}}
-                    ></i>
+                        <i
+                            className="bi bi-chat-left-text mr-3"
+                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                        ></i>
+                    </div>
                 </div>
             </div>
         </div>
-</div>
-)
-    ;
+    );
 };
 
 export default PostCard;
