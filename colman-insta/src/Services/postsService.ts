@@ -90,5 +90,32 @@ export const deletePost = (id: string): Promise<PostData> => {
             });
     });
 };
+export const likePost = (postId: string, userId: string): Promise<PostData> => {
+    return new Promise<PostData>((resolve, reject) => {
+        apiClient.post<PostData>(`posts/${postId}/like`, { userId })
+            .then((res) => {
+                console.log("Success to like/unlike post: ", res.data);
+                resolve(res.data);
+            })
+            .catch((err) => {
+                console.error("Error in liking/unliking post: ", err);
+                reject(err);
+            });
+    });
+};
 
-export default { getAllPosts, getPostById, getPostsBySender, createPost, updatePost, deletePost };
+export const getLikedPosts = (userId: string): Promise<PostData[]> => {
+    return new Promise<PostData[]>((resolve, reject) => {
+        apiClient.get<PostData[]>(`posts/liked?userId=${userId}`)
+            .then((res) => {
+                console.log("Success to get liked posts: ", res.data);
+                resolve(res.data);
+            })
+            .catch((err) => {
+                console.error("Error in getting liked posts: ", err);
+                reject(err);
+            });
+    });
+};
+
+export default { getAllPosts, getPostById, getPostsBySender, createPost, updatePost, deletePost, likePost, getLikedPosts };

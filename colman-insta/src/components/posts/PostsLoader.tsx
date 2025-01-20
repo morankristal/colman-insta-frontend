@@ -3,12 +3,38 @@ import { getAllPosts } from "../../Services/postsService.ts";
 import userService from "../../Services/usersService.ts";
 import { PostData } from "../../types/postTypes.ts";
 import { Spinner } from "react-bootstrap";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import PostCard from "./PostCard";
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    _id: string;
+    exp: number;
+}
 
 const PostsLoader: React.FC = () => {
     const [posts, setPosts] = useState<PostData[]>([]);
     const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
     const [loading, setLoading] = useState<boolean>(true);
+    const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
+
+    const getCurrentUserFromCookie = () => {
+        const cookies = document.cookie.split('; ');
+        const tokenCookie = cookies.find((cookie) => cookie.startsWith('accessToken='));
+        if (!tokenCookie) return null;
+
+        const token = tokenCookie.split('=')[1];
+        try {
+            return jwtDecode<DecodedToken>(token);
+        } catch (error) {
+            console.error('Failed to decode token:', error);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        const currentUser = getCurrentUserFromCookie();
+        setCurrentUser(currentUser);  // עדכון מצב המשתמש המחובר
+    }, []);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -61,49 +87,12 @@ const PostsLoader: React.FC = () => {
             ) : (
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     {posts.map((post) => (
-                        <div key={post._id} className="col">
-                            <div className="card h-100">
-                                <div className="card-header d-flex justify-content-between align-items-center">
-                                    <h5 className="card-title m-0">{post.title}</h5>
-                                </div>
-                                {post.image && (
-                                    <img
-                                        src={`http://localhost:3000/uploads/${post.image}`}
-                                        alt="Post image"
-                                        className="card-img-top"
-                                        style={{
-                                            maxHeight: "250px",
-                                            objectFit: "cover",
-                                            borderTopLeftRadius: "10px",
-                                            borderTopRightRadius: "10px",
-                                        }}
-                                    />
-                                )}
-                                <div className="card-body d-flex flex-column">
-                                    <p className="card-text text-muted">{post.content}</p>
-                                    <p className="card-text">
-                                        <small className="text-muted">
-                                            Created By: {userNames[post.sender!] || "Unknown"}
-                                        </small>
-                                    </p>
-                                </div>
-                                <div className="card-footer d-flex justify-content-between align-items-center">
-                                    <small className="text-muted">
-                                        Created at: {new Date(post.createdAt).toLocaleString()}
-                                    </small>
-                                    <div>
-                                        <i
-                                            className="bi bi-heart me-3"
-                                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                        ></i>
-                                        <i
-                                            className="bi bi-chat-left-text"
-                                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                        ></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <PostCard
+                            key={post._id}
+                            post={post}
+                            userNames={userNames}
+                            currentUser={currentUser}
+                        />
                     ))}
                 </div>
             )}

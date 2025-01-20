@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import postService from "../../Services/postsService";
 import userService from "../../Services/usersService";
 import { PostData } from "../../types/postTypes.ts";
-import { useNavigate } from "react-router-dom";
-import 'bootstrap-icons/font/bootstrap-icons.css';
-import DeletePostButton from "./DeletePostButton";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
+import PostCard from "./PostCard";
 
 interface UserPostsProps {
     userId: string;
@@ -21,7 +19,6 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
     const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate();
 
     const getCurrentUserFromCookie = () => {
         const cookies = document.cookie.split('; ');
@@ -79,63 +76,13 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
             {userPosts.length > 0 ? (
                 <div className="row row-cols-1 row-cols-md-3 g-4">
                     {userPosts.map((post) => (
-                        <div key={post._id} className="col">
-                            <div className="card h-100">
-                                <div className="card-header d-flex justify-content-between align-items-center">
-                                    {currentUser && currentUser._id === post.sender && (
-                                        <div>
-                                            <button
-                                                className="btn btn-link text-primary p-0 m-0"
-                                                onClick={() => navigate(`/edit-post/${post._id}`)}
-                                            >
-                                                <i
-                                                    className="bi bi-pencil-square"
-                                                    style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                                ></i>
-                                            </button>
-                                            {post._id && (
-                                                <DeletePostButton postId={post._id} setUserPosts={setUserPosts} />
-                                            )}
-                                        </div>
-                                    )}
-                                    <h5 className="card-title m-0">{post.title}</h5>
-                                </div>
-                                {post.image && (
-                                    <img
-                                        src={`http://localhost:3000/uploads/${post.image}`}
-                                        alt="Post"
-                                        className="card-img-top"
-                                        style={{
-                                            objectFit: "cover",
-                                            height: "200px",
-                                        }}
-                                    />
-                                )}
-                                <div className="card-body">
-                                    <p className="card-text">{post.content}</p>
-                                    <p className="card-text">
-                                        <small className="text-muted">
-                                            Created By: {userNames[post.sender!] || "Unknown"}
-                                        </small>
-                                    </p>
-                                </div>
-                                <div className="card-footer d-flex justify-content-between align-items-center">
-                                    <small className="text-muted">
-                                        Created at: {new Date(post.createdAt).toLocaleString()}
-                                    </small>
-                                    <div>
-                                        <i
-                                            className="bi bi-heart me-3"
-                                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                        ></i>
-                                        <i
-                                            className="bi bi-chat-left-text mr-3"
-                                            style={{ fontSize: "1.5rem", cursor: "pointer" }}
-                                        ></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <PostCard
+                            key={post._id}
+                            post={post}
+                            userNames={userNames}
+                            currentUser={currentUser}
+                            setUserPosts={setUserPosts}
+                        />
                     ))}
                 </div>
             ) : (
