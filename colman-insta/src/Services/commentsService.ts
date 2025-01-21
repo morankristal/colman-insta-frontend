@@ -87,4 +87,5 @@ export const deleteComment = (id: string): Promise<CommentData> => {
     });
 };
 
+
 export default { getAllComments, getCommentById, getCommentsByPost, createComment, updateComment, deleteComment };

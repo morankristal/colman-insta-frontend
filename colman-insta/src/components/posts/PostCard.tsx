@@ -1,9 +1,8 @@
-// src/components/PostCard.tsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PostData } from '../../types/postTypes.ts';
 import postService from '../../Services/postsService';
+import commentsService from '../../Services/commentsService';
 import DeletePostButton from './DeletePostButton';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Modal } from "react-bootstrap";
@@ -18,6 +17,7 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUserPosts }) => {
     const [isLiked, setIsLiked] = useState(false);
+    const [commentsCount, setCommentsCount] = useState(0); // State for comments count
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const navigate = useNavigate();
 
@@ -26,6 +26,22 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
             setIsLiked(post.likes.includes(currentUser._id));
         }
     }, [currentUser, post]);
+
+    useEffect(() => {
+        const fetchCommentsCount = async () => {
+            try {
+                const comments = await commentsService.getCommentsByPost(post._id!);
+                setCommentsCount(comments.length); // Set comments count
+            } catch (err) {
+                console.error(`Error fetching comments for post ${post._id}:`, err);
+                setCommentsCount(0);
+            }
+        };
+
+        if (post._id) {
+            fetchCommentsCount();
+        }
+    }, [post._id]);
 
     const handleLike = async () => {
         if (currentUser) {
@@ -106,7 +122,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                                 className="bi bi-chat-left-text mr-3"
                                 style={{fontSize: "1.5rem", cursor: "pointer"}}
                                 onClick={handleCommentsClick}
-                            ></i>
+                            >
+                            </i> {commentsCount}
                         </div>
                     </div>
                 </div>
@@ -117,9 +134,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                 <Modal.Body>
                     {post._id ? (
                         <PostCommentsPage postId={post._id} />
-                        ) : (
+                    ) : (
                         <p>Post ID is missing!</p>
-                        )}
+                    )}
                 </Modal.Body>
             </Modal>
         </>
