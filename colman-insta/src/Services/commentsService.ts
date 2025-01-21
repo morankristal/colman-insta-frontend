@@ -45,7 +45,7 @@ export const getCommentsByPost = (postId: string): Promise<CommentData[]> => {
     });
 };
 
-export const createComment = (commentData: { content: string; postId: string }): Promise<CommentData> => {
+export const createComment = (commentData: { content: string; post: string }): Promise<CommentData> => {
     return new Promise<CommentData>((resolve, reject) => {
         apiClient.post<CommentData>("comments", commentData)
             .then((res) => {

@@ -17,9 +17,18 @@ interface PostCardProps {
 
 const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUserPosts }) => {
     const [isLiked, setIsLiked] = useState(false);
-    const [commentsCount, setCommentsCount] = useState(0); // State for comments count
+    const [commentsCount, setCommentsCount] = useState(0);
     const [showCommentsModal, setShowCommentsModal] = useState(false);
     const navigate = useNavigate();
+
+    const fetchCommentsCount = async () => {
+        try {
+            const comments = await commentsService.getCommentsByPost(post._id!);
+            setCommentsCount(comments.length);
+        } catch (err) {
+            console.error(`Error fetching comments for post ${post._id}:`, err);
+        }
+    };
 
     useEffect(() => {
         if (currentUser) {
@@ -28,16 +37,6 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
     }, [currentUser, post]);
 
     useEffect(() => {
-        const fetchCommentsCount = async () => {
-            try {
-                const comments = await commentsService.getCommentsByPost(post._id!);
-                setCommentsCount(comments.length); // Set comments count
-            } catch (err) {
-                console.error(`Error fetching comments for post ${post._id}:`, err);
-                setCommentsCount(0);
-            }
-        };
-
         if (post._id) {
             fetchCommentsCount();
         }
@@ -48,10 +47,14 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
             try {
                 const newLikeState = !isLiked;
                 setIsLiked(newLikeState);
-                const updatedPost = { ...post, likes: newLikeState ? [...post.likes, currentUser._id] : post.likes.filter(id => id !== currentUser._id) };
-                setUserPosts && setUserPosts((prevPosts) => {
-                    return prevPosts.map((p) => p._id === post._id ? updatedPost : p);
-                });
+                const updatedPost = {
+                    ...post,
+                    likes: newLikeState ? [...post.likes, currentUser._id] : post.likes.filter(id => id !== currentUser._id),
+                };
+                setUserPosts &&
+                setUserPosts((prevPosts) =>
+                    prevPosts.map((p) => (p._id === post._id ? updatedPost : p))
+                );
                 await postService.likePost(post._id!, currentUser._id);
             } catch (err) {
                 console.error("Error handling like:", err);
@@ -64,8 +67,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
         setShowCommentsModal(true);
     };
 
-    const closeModal = () => {
+    const closeModal = async () => {
         setShowCommentsModal(false);
+        await fetchCommentsCount();
     };
 
     return (
@@ -81,11 +85,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                                 >
                                     <i
                                         className="bi bi-pencil-square"
-                                        style={{fontSize: "1.5rem", cursor: "pointer"}}
+                                        style={{ fontSize: "1.5rem", cursor: "pointer" }}
                                     ></i>
                                 </button>
                                 {post._id && setUserPosts && (
-                                    <DeletePostButton postId={post._id} setUserPosts={setUserPosts}/>
+                                    <DeletePostButton postId={post._id} setUserPosts={setUserPosts} />
                                 )}
                             </div>
                         )}
@@ -99,7 +103,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                             style={{
                                 objectFit: "cover",
                                 height: "200px",
-                            }}/>
+                            }}
+                        />
                     )}
                     <div className="card-body">
                         <p className="card-text">{post.content}</p>
@@ -116,11 +121,12 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                         <div>
                             <i
                                 className={`bi ${isLiked ? 'bi-heart-fill text-danger' : 'bi-heart'} me-3`}
-                                style={{fontSize: "1.5rem", cursor: "pointer"}}
-                                onClick={handleLike}/>
+                                style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                                onClick={handleLike}
+                            />
                             <i
                                 className="bi bi-chat-left-text mr-3"
-                                style={{fontSize: "1.5rem", cursor: "pointer"}}
+                                style={{ fontSize: "1.5rem", cursor: "pointer" }}
                                 onClick={handleCommentsClick}
                             >
                             </i> {commentsCount}

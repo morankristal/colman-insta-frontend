@@ -1,31 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CommentData } from '../../types/commentTypes';
-import commentsService from '../../Services/commentsService';
 import usersService from '../../Services/usersService';
+import CommentItem from './commentItem';
 
 interface CommentsListProps {
-    postId: string;
+    comments: CommentData[];
+    onUpdateComment: (updatedComment: CommentData) => void;
 }
 
-const CommentsList: React.FC<CommentsListProps> = ({ postId }) => {
-    const [comments, setComments] = useState<(CommentData & { senderName: string; senderAvatar: string })[]>([]);
+const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }) => {
+    const [commentsWithUserData, setCommentsWithUserData] = useState<(CommentData & { senderName: string; senderAvatar: string })[]>([]);
 
     useEffect(() => {
-        const fetchCommentsWithUserNames = async () => {
+        const enrichCommentsWithUserData = async () => {
             try {
-                const fetchedComments = await commentsService.getCommentsByPost(postId);
-
                 const userIds = Array.from(
-                    new Set(fetchedComments
-                        .map(comment => {
-                            const sender = comment.sender;
-                            if (typeof sender === "object" && sender !== null && "_id" in sender) {
-                                return sender._id;
-                            }
-                            return sender as string;
-                        })
-                        .filter(Boolean)
-                    )
+                    new Set(comments.map((comment) => {
+                        const sender = comment.sender;
+                        return typeof sender === 'object' && sender !== null && '_id' in sender
+                            ? sender._id
+                            : sender as string;
+                    }))
                 );
 
                 const userNamesMap: { [key: string]: string } = {};
@@ -37,7 +32,7 @@ const CommentsList: React.FC<CommentsListProps> = ({ postId }) => {
                     userAvatarsMap[userId] = user.profilePicture || 'default-avatar.png';
                 }
 
-                const commentsWithNames = fetchedComments.map(comment => ({
+                const enrichedComments = comments.map((comment) => ({
                     ...comment,
                     senderName: typeof comment.sender === 'object' && comment.sender !== null
                         ? userNamesMap[comment.sender._id]
@@ -47,45 +42,37 @@ const CommentsList: React.FC<CommentsListProps> = ({ postId }) => {
                         : userAvatarsMap[comment.sender as string] || 'default-avatar.png',
                 }));
 
-                setComments(commentsWithNames);
+                setCommentsWithUserData(enrichedComments);
             } catch (err) {
-                console.error('Error fetching comments or user names:', err);
+                console.error('Error enriching comments with user data:', err);
             }
         };
 
-        fetchCommentsWithUserNames();
-    }, [postId]);
+        enrichCommentsWithUserData();
+    }, [comments]);
+
+    const handleUpdateComment = (updatedComment: CommentData) => {
+        const updatedComments = commentsWithUserData.map((comment) =>
+            comment._id === updatedComment._id ? { ...comment, ...updatedComment } : comment
+        );
+        setCommentsWithUserData(updatedComments);
+        onUpdateComment(updatedComment);
+    };
 
     return (
         <div className="container mt-4">
             <h3>Comments:</h3>
             <div>
-                {comments.length > 0 ? (
-                    comments.map((comment) => (
-                        <div key={comment._id} className="card mb-3 shadow-sm border-light">
-                            <div className="card-body d-flex align-items-start">
-                                <img
-                                    src={comment.senderAvatar}
-                                    alt={`${comment.senderName}'s Avatar`}
-                                    className="rounded-circle me-3"
-                                    style={{ width: '50px', height: '50px', objectFit: 'cover' }}
-                                />
-                                <div>
-                                    <h5 className="card-title text-primary mb-1">{comment.senderName}</h5>
-                                    <p className="card-text">{comment.content}</p>
-                                    <small className="text-muted">
-                                        {new Date(comment.createdAt).toLocaleDateString('en-US', {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                        })}
-                                    </small>
-                                </div>
-                            </div>
-                        </div>
+                {commentsWithUserData.length > 0 ? (
+                    commentsWithUserData.map((comment) => (
+                        <CommentItem
+                            key={comment._id}
+                            comment={comment}
+                            onUpdate={handleUpdateComment}
+                        />
                     ))
                 ) : (
-                    <p>No comments yet.</p>
+                    <div className="alert alert-info">No comments yet.</div>
                 )}
             </div>
         </div>
