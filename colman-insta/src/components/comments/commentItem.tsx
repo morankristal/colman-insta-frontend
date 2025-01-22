@@ -5,9 +5,10 @@ import EditComment from './EditComment';
 interface CommentItemProps {
     comment: CommentData & { senderName: string; senderAvatar: string };
     onUpdate: (updatedComment: CommentData) => void;
+    canEdit: boolean;
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate, canEdit }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const handleSave = (updatedComment: CommentData) => {
@@ -40,12 +41,14 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate }) => {
                                     day: 'numeric',
                                 })}
                             </small>
-                            <button
-                                onClick={() => setIsEditing(true)}
-                                className="btn btn-outline-primary btn-sm ms-2"
-                            >
-                                Edit
-                            </button>
+                            {canEdit && !isEditing && (
+                                <button
+                                    onClick={() => setIsEditing(true)}
+                                    className="btn btn-outline-primary btn-sm ms-2"
+                                >
+                                    Edit
+                                </button>
+                            )}
                         </>
                     ) : (
                         <EditComment

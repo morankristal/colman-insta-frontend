@@ -2,26 +2,49 @@ import React, { useEffect, useState } from 'react';
 import { CommentData } from '../../types/commentTypes';
 import usersService from '../../Services/usersService';
 import CommentItem from './commentItem';
+import { jwtDecode } from 'jwt-decode';
+
+interface DecodedToken {
+    _id: string;
+}
 
 interface CommentsListProps {
     comments: CommentData[];
-    onUpdateComment: (updatedComment: CommentData) => void;
+    onUpdateComment: () => void;
 }
 
 const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }) => {
     const [commentsWithUserData, setCommentsWithUserData] = useState<(CommentData & { senderName: string; senderAvatar: string })[]>([]);
+    const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
+
+    const getCurrentUserFromCookie = () => {
+        const cookies = document.cookie.split('; ');
+        const tokenCookie = cookies.find((cookie) => cookie.startsWith('accessToken='));
+        if (!tokenCookie) return null;
+
+        const token = tokenCookie.split('=')[1];
+        try {
+            return jwtDecode<DecodedToken>(token);
+        } catch (error) {
+            console.error('Failed to decode token:', error);
+            return null;
+        }
+    };
+
+    useEffect(() => {
+        const user = getCurrentUserFromCookie();
+        setCurrentUser(user);
+    }, []);
 
     useEffect(() => {
         const enrichCommentsWithUserData = async () => {
             try {
-                const userIds = Array.from(
-                    new Set(comments.map((comment) => {
-                        const sender = comment.sender;
-                        return typeof sender === 'object' && sender !== null && '_id' in sender
-                            ? sender._id
-                            : sender as string;
-                    }))
-                );
+                const userIds = Array.from(new Set(comments.map((comment) => {
+                    const sender = comment.sender;
+                    return typeof sender === 'object' && sender !== null && '_id' in sender
+                        ? sender._id
+                        : sender as string;
+                })));
 
                 const userNamesMap: { [key: string]: string } = {};
                 const userAvatarsMap: { [key: string]: string } = {};
@@ -42,6 +65,9 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }
                         : userAvatarsMap[comment.sender as string] || 'default-avatar.png',
                 }));
 
+                // מיון התגובות מהחדש לישן לפי תאריך יצירה
+                enrichedComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
                 setCommentsWithUserData(enrichedComments);
             } catch (err) {
                 console.error('Error enriching comments with user data:', err);
@@ -50,14 +76,6 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }
 
         enrichCommentsWithUserData();
     }, [comments]);
-
-    const handleUpdateComment = (updatedComment: CommentData) => {
-        const updatedComments = commentsWithUserData.map((comment) =>
-            comment._id === updatedComment._id ? { ...comment, ...updatedComment } : comment
-        );
-        setCommentsWithUserData(updatedComments);
-        onUpdateComment(updatedComment);
-    };
 
     return (
         <div className="container mt-4">
@@ -68,7 +86,8 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }
                         <CommentItem
                             key={comment._id}
                             comment={comment}
-                            onUpdate={handleUpdateComment}
+                            onUpdate={onUpdateComment}
+                            canEdit={currentUser?._id === comment.sender._id}
                         />
                     ))
                 ) : (

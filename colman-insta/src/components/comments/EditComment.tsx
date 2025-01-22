@@ -20,7 +20,6 @@ const EditComment: React.FC<EditCommentProps> = ({ comment, onSave, onCancel }) 
         try {
             const updatedComment = await commentsService.updateComment(comment._id, { content: newContent });
             onSave(updatedComment);
-            onCancel();
         } catch {
             setError('Failed to update the comment');
         } finally {

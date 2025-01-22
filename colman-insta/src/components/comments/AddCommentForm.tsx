@@ -42,10 +42,10 @@ const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId, onCommentAdded 
                     disabled={isSubmitting}
                 />
             </div>
-            {error && <p className="text-danger mt-2">{error}</p>}
             <button type="submit" className="btn btn-primary mt-2" disabled={isSubmitting}>
-                {isSubmitting ? 'Adding...' : 'Add Comment'}
+                {isSubmitting ? 'Posting...' : 'Post Comment'}
             </button>
+            {error && <div className="text-danger mt-2">{error}</div>}
         </form>
     );
 };
