@@ -19,6 +19,8 @@ const PostsLoader: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(true);
     const [currentUser, setCurrentUser] = useState<{ _id: string } | null>(null);
     const [showLikedPosts, setShowLikedPosts] = useState<boolean>(false);
+    const [currentPage, setCurrentPage] = useState(1); // עמוד נוכחי
+    const [postsPerPage] = useState(3); // מספר פריטים לכל עמוד
 
     const getCurrentUserFromCookie = () => {
         const cookies = document.cookie.split('; ');
@@ -84,6 +86,24 @@ const PostsLoader: React.FC = () => {
         setShowLikedPosts((prev) => !prev);
     };
 
+    const indexOfLastPost = currentPage * postsPerPage;
+    const indexOfFirstPost = indexOfLastPost - postsPerPage;
+    const currentPosts = (showLikedPosts ? filteredPosts : posts).slice(indexOfFirstPost, indexOfLastPost);
+
+    const totalPages = Math.ceil((showLikedPosts ? filteredPosts : posts).length / postsPerPage);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
     return (
         <div className="container mt-4">
             <button
@@ -109,16 +129,35 @@ const PostsLoader: React.FC = () => {
                     </Spinner>
                 </div>
             ) : (
-                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                    {(showLikedPosts ? filteredPosts : posts).map((post) => (
-                        <PostCard
-                            key={post._id}
-                            post={post}
-                            userNames={userNames}
-                            currentUser={currentUser}
-                            setUserPosts={setPosts}
-                        />
-                    ))}
+                <div>
+                    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                        {currentPosts.map((post) => (
+                            <PostCard
+                                key={post._id}
+                                post={post}
+                                userNames={userNames}
+                                currentUser={currentUser}
+                                setUserPosts={setPosts}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="d-flex justify-content-between mt-3">
+                        <button
+                            className="btn btn-secondary"
+                            onClick={handlePrevPage}
+                            disabled={currentPage === 1}
+                        >
+                            Previous
+                        </button>
+                        <button
+                            className="btn btn-secondary"
+                            onClick={handleNextPage}
+                            disabled={currentPage === totalPages}
+                        >
+                            Next
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

@@ -6,7 +6,7 @@ import userService from "../Services/usersService";
 import SearchBar from "../components/SearchBar";
 import PostsLoader from "../components/posts/PostsLoader.tsx";
 import LogoutButton from "../components/users/LogoutButton";
-import 'bootstrap-icons/font/bootstrap-icons.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 
 interface DecodedToken {
     _id: string;
@@ -49,18 +49,20 @@ const HomePage: React.FC = () => {
     };
 
     return (
-        <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <div className="bg-light min-vh-100">
+            <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <div className="container-fluid">
                     <div className="d-flex justify-content-between w-100 align-items-center">
                         <SearchBar
-                            onSearch={(username) => console.log(`Searching for user: ${username}`)}
+                            onSearch={(username) =>
+                                console.log(`Searching for user: ${username}`)
+                            }
                         />
                         <div className="d-flex align-items-center">
                             {loggedInUser && (
                                 <>
                                     <button
-                                        className="btn btn-light rounded-circle p-0 me-3"
+                                        className="btn btn-light rounded-circle p-0 me-3 shadow-sm"
                                         style={{
                                             width: "50px",
                                             height: "50px",
@@ -86,19 +88,18 @@ const HomePage: React.FC = () => {
                     </div>
                 </div>
             </nav>
-            <div className="container mt-4">
+            <div className="container mt-5">
                 <PostsLoader />
             </div>
             <Link to="/create-post">
                 <button
-                    className="btn btn-success position-fixed bottom-0 end-0 m-3 rounded-circle d-flex justify-content-center align-items-center"
+                    className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 shadow"
                     style={{
-                        width: "60px",
-                        height: "60px",
-                        fontSize: "30px",
+                        width: "50px",
+                        height: "50px",
                     }}
                 >
-                    <span className="text-white">+</span>
+                    <i className="bi bi-plus-lg fs-4 text-white"></i>
                 </button>
             </Link>
         </div>

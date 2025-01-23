@@ -28,6 +28,10 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ postId }) => {
             const fetchedComments = await commentService.getCommentsByPost(postId);
             setComments(fetchedComments);
         } catch (err) {
+            if(err === 404) {
+                console.error('Post not found');
+                return;
+            }
             console.error('Error fetching comments:', err);
         }
     };
@@ -41,12 +45,7 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ postId }) => {
         <div className="container mt-4">
             {post ? (
                 <>
-                    <h2 className="mb-3">{post.title}</h2>
-                    <p>{post.content}</p>
-                    <div className="mt-4">
-                        <h5>Comments</h5>
                         <CommentsList comments={comments} onUpdateComment={fetchComments} />
-                    </div>
                     <div className="mt-4">
                         <AddCommentForm postId={postId} onCommentAdded={fetchComments} />
                     </div>

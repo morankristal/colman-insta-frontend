@@ -72,21 +72,21 @@ const UserProfile: React.FC<UserProfileProps> = ({ username }) => {
     return (
         <div>
             <button
-                className="btn btn-primary position-absolute top-0 start-0 m-3"
+                className="btn btn-outline-secondary position-absolute top-0 start-0 m-3"
                 onClick={handleBackHomePageClick}
             >
-                Back to Home Page
+                <i className="bi bi-arrow-left-circle"></i> Back to Home Page
             </button>
 
             <div className="container mt-5">
-                <div className="card mx-auto shadow" style={{ maxWidth: '600px' }}>
+                <div className="card mx-auto shadow" style={{maxWidth: '600px'}}>
                     <div className="card-body">
                         <div className="d-flex align-items-center">
                             <img
                                 src={user.profilePicture}
                                 alt="Profile"
                                 className="rounded-circle me-3"
-                                style={{ width: '100px', height: '100px' }}
+                                style={{width: '100px', height: '100px'}}
                             />
                             <div>
                                 <h2 className="card-title mb-1">{user.username}</h2>

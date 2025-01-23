@@ -8,7 +8,6 @@ export const register = (data: UserData): Promise<UserData> => {
             .post<UserData>("auth/register", data)
             .then((res) => resolve(res.data))
             .catch((err) => {
-                console.error("Error in registering user: ", err);
                 reject(err);
             });
     });
@@ -20,7 +19,6 @@ export const login = (username: string, password: string): Promise<TokenResponse
             .post<TokenResponse>("auth/login", { username, password }) // הוספתי withCredentials
             .then((res) => resolve(res.data))
             .catch((err) => {
-                console.error("Error in logging in: ", err);
                 reject(err);
             });
     });
@@ -33,7 +31,6 @@ export const refresh = ( refreshToken: string): Promise<TokenResponse> => {
             .post<TokenResponse>("auth/refresh", refreshToken)
             .then((res) => resolve(res.data))
             .catch((err) => {
-                console.error("Error in refreshing tokens: ", err);
                 reject(err);
             });
     });
@@ -45,7 +42,6 @@ export const logout = (refreshToken: string): Promise<void> => {
             .post<void>("auth/logout", refreshToken)
             .then(() => resolve())
             .catch((err) => {
-                console.error("Error in logging out: ", err);
                 reject(err);
             });
     });

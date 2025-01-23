@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { CommentData } from '../../types/commentTypes';
 import EditComment from './EditComment';
+import DeleteCommentButton from './DeleteCommentButton';
 
 interface CommentItemProps {
     comment: CommentData & { senderName: string; senderAvatar: string };
     onUpdate: (updatedComment: CommentData) => void;
+    onDelete: (commentId: string) => void;
     canEdit: boolean;
 }
 
-const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate, canEdit }) => {
+const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate, onDelete, canEdit }) => {
     const [isEditing, setIsEditing] = useState(false);
 
     const handleSave = (updatedComment: CommentData) => {
@@ -41,13 +43,19 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment, onUpdate, canEdit })
                                     day: 'numeric',
                                 })}
                             </small>
-                            {canEdit && !isEditing && (
-                                <button
-                                    onClick={() => setIsEditing(true)}
-                                    className="btn btn-outline-primary btn-sm ms-2"
-                                >
-                                    Edit
-                                </button>
+                            {canEdit && (
+                                <div className="mt-2">
+                                    <button
+                                        onClick={() => setIsEditing(true)}
+                                        className="btn btn-outline-primary btn-sm"
+                                    >
+                                        Edit
+                                    </button>
+                                    <DeleteCommentButton
+                                        commentId={comment._id}
+                                        onDeleteSuccess={() => onDelete(comment._id)}
+                                    />
+                                </div>
                             )}
                         </>
                     ) : (

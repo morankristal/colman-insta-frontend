@@ -65,9 +65,6 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }
                         : userAvatarsMap[comment.sender as string] || 'default-avatar.png',
                 }));
 
-                // מיון התגובות מהחדש לישן לפי תאריך יצירה
-                enrichedComments.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
                 setCommentsWithUserData(enrichedComments);
             } catch (err) {
                 console.error('Error enriching comments with user data:', err);
@@ -79,14 +76,14 @@ const CommentsList: React.FC<CommentsListProps> = ({ comments, onUpdateComment }
 
     return (
         <div className="container mt-4">
-            <h3>Comments:</h3>
-            <div>
+            <div className="comments-container" style={{ maxHeight: '400px', overflowY: 'auto' }}>
                 {commentsWithUserData.length > 0 ? (
                     commentsWithUserData.map((comment) => (
                         <CommentItem
                             key={comment._id}
                             comment={comment}
                             onUpdate={onUpdateComment}
+                            onDelete={onUpdateComment}
                             canEdit={currentUser?._id === comment.sender._id}
                         />
                     ))

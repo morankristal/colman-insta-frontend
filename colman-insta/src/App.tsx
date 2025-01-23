@@ -9,7 +9,7 @@ import LoginPage from "./pages/LoginPage.tsx";
 import RegisterPage from "./pages/RegisterPage.tsx";
 import CreatePost from "./components/posts/CreatePost.tsx";
 import EditPost from "./components/posts/EditPost.tsx";
-import PostCommentsPage from "./pages/PostCommentsPage.tsx";
+import DeletePostButton from "./components/posts/DeletePostButton.tsx";
 
 const queryClient = new QueryClient();
 
@@ -26,7 +26,7 @@ function App() {
                         <Route path="/edit-profile/:id" element={<EditProfile />} />
                         <Route path="/create-post" element={<CreatePost/>} />
                         <Route path="/edit-post/:id" element={<EditPost/>} />
-                        <Route path={"/post-comments/:postId"} element={<PostCommentsPage/>} />
+                        <Route path="/delte-post/:postId" element={<DeletePostButton/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>

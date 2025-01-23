@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { PostData } from '../../types/postTypes.ts';
 import postService from '../../Services/postsService';
 import commentsService from '../../Services/commentsService';
-import DeletePostButton from './DeletePostButton';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { Modal } from "react-bootstrap";
 import PostCommentsPage from '../../pages/PostCommentsPage.tsx';
@@ -72,6 +71,22 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
         await fetchCommentsCount();
     };
 
+    const handleEdit = () => {
+        navigate(`/edit-post/${post._id}`);
+    };
+
+    const handleDelete = async () => {
+        try {
+            await postService.deletePost(post._id!);
+            // Update the posts list after deletion
+            setUserPosts && setUserPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+            alert("Post deleted successfully.");
+        } catch (err) {
+            console.error("Error deleting post:", err);
+            alert("Failed to delete the post.");
+        }
+    };
+
     return (
         <>
             <div key={post._id} className="col">
@@ -81,16 +96,22 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                             <div>
                                 <button
                                     className="btn btn-link text-primary p-0 m-0"
-                                    onClick={() => navigate(`/edit-post/${post._id}`)}
+                                    onClick={handleEdit}
                                 >
                                     <i
                                         className="bi bi-pencil-square"
                                         style={{ fontSize: "1.5rem", cursor: "pointer" }}
                                     ></i>
                                 </button>
-                                {post._id && setUserPosts && (
-                                    <DeletePostButton postId={post._id} setUserPosts={setUserPosts} />
-                                )}
+                                <button
+                                    className="btn btn-link text-danger p-0 m-0"
+                                    onClick={handleDelete}
+                                >
+                                    <i
+                                        className="bi bi-trash"
+                                        style={{ fontSize: "1.5rem", cursor: "pointer" }}
+                                    ></i>
+                                </button>
                             </div>
                         )}
                         <h5 className="card-title m-0">{post.title}</h5>
