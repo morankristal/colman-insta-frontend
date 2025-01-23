@@ -1,19 +1,19 @@
 import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import postService from "../../Services/postsService";
-import { useNavigate } from "react-router-dom";
 
-interface DeletePostButtonProps {
-    postId: string;
-    setUserPosts: React.Dispatch<React.SetStateAction<any>>;
-}
-
-const DeletePostButton: React.FC<DeletePostButtonProps> = ({ postId, setUserPosts }) => {
+const DeletePostButton: React.FC = () => {
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
 
     const handleDelete = async () => {
+        if (!id) {
+            console.error("Post ID is missing");
+            return;
+        }
+
         try {
-            await postService.deletePost(postId);
-            setUserPosts((prevPosts: any) => prevPosts.filter((post: any) => post._id !== postId));
+            await postService.deletePost(id);
             alert("Post deleted successfully.");
             navigate(-1);
         } catch (err) {

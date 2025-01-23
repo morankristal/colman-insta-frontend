@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import postService from "../../Services/postsService.ts";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
-
 const EditPost: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
@@ -75,7 +74,13 @@ const EditPost: React.FC = () => {
 
     return (
         <div className="container mt-5">
-            <h2>Edit Post</h2>
+            <button
+                className="btn btn-outline-secondary position-absolute top-0 start-0 m-3"
+                onClick={() => navigate(-1)}
+            >
+                <i className="bi bi-arrow-left-circle"></i> Back
+            </button>
+            <h2 className="text-center mb-4">Edit Post</h2>
             <form onSubmit={handleFormSubmit}>
                 <div className="mb-3">
                     <label htmlFor="title" className="form-label">
@@ -117,12 +122,16 @@ const EditPost: React.FC = () => {
                         onChange={handleFileChange}
                     />
                     {formData.image && !imageFile && (
-                        <p>Current Image: {formData.image}</p>
+                        <div className="mt-2">
+                            <p>Current Image: {formData.image}</p>
+                        </div>
                     )}
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button type="submit" className="btn btn-primary btn-sm">
                     Save Changes
                 </button>
+
+
             </form>
         </div>
     );
