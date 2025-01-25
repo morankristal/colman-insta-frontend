@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import { login } from "../../Services/authService.ts";
+import { loginWithGoogle, login } from "../../Services/authService.ts";
 import { GoogleLogin } from '@react-oauth/google';
 
 const LoginForm: React.FC = () => {
@@ -16,11 +16,10 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await login(username, password);
-            console.log('Login successful:', response);
+            await login(username, password);
             alert('Login successful!');
-            console.log("hi", document.cookie);
             navigate("/homePage");
+
         } catch (error: any) {
             if (error.response) {
                 console.error('Login failed:', error.response.data.message);
@@ -32,11 +31,19 @@ const LoginForm: React.FC = () => {
         }
     };
 
-    const handleGoogleLoginSuccess = (credentialResponse: any) => {
-        console.log('Google Login Success:', credentialResponse);
-        // Send the token to the backend for verification
-        alert('Google Login Successful!');
-        navigate("/homePage");
+    const handleGoogleLoginSuccess = async (credentialResponse: any) => {
+        const { credential } = credentialResponse;
+
+        try {
+
+            await loginWithGoogle(credential)
+            alert('Google Login Successful!');
+            navigate("/homePage");
+
+        } catch (error: any) {
+            console.error('Error during Google login:', error);
+            alert('Google Login Failed. Please try again.');
+        }
     };
 
     const handleGoogleLoginError = () => {

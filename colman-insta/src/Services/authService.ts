@@ -16,7 +16,7 @@ export const register = (data: UserData): Promise<UserData> => {
 export const login = (username: string, password: string): Promise<TokenResponse> => {
     return new Promise((resolve, reject) => {
         apiClient
-            .post<TokenResponse>("auth/login", { username, password }) // הוספתי withCredentials
+            .post<TokenResponse>("auth/login", { username, password })
             .then((res) => resolve(res.data))
             .catch((err) => {
                 reject(err);
@@ -24,6 +24,16 @@ export const login = (username: string, password: string): Promise<TokenResponse
     });
 };
 
+export const loginWithGoogle = (googleToken: string): Promise<TokenResponse> => {
+    return new Promise((resolve, reject) => {
+        apiClient
+            .post<TokenResponse>("auth/google-login", { credential: googleToken })
+            .then((res) => resolve(res.data))
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
 
 export const refresh = ( refreshToken: string): Promise<TokenResponse> => {
     return new Promise((resolve, reject) => {
@@ -52,4 +62,5 @@ export default {
     login,
     refresh,
     logout,
+    loginWithGoogle,
 };
