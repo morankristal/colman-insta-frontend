@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import {login} from "../../Services/authService.ts";
+import { login } from "../../Services/authService.ts";
+import { GoogleLogin } from '@react-oauth/google';
 
 const LoginForm: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -15,10 +16,10 @@ const LoginForm: React.FC = () => {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await login( username, password );
+            const response = await login(username, password);
             console.log('Login successful:', response);
             alert('Login successful!');
-            console.log("hi" ,document.cookie);
+            console.log("hi", document.cookie);
             navigate("/homePage");
         } catch (error: any) {
             if (error.response) {
@@ -29,6 +30,18 @@ const LoginForm: React.FC = () => {
                 alert('An error occurred. Please try again.');
             }
         }
+    };
+
+    const handleGoogleLoginSuccess = (credentialResponse: any) => {
+        console.log('Google Login Success:', credentialResponse);
+        // Send the token to the backend for verification
+        alert('Google Login Successful!');
+        navigate("/homePage");
+    };
+
+    const handleGoogleLoginError = () => {
+        console.error('Google Login Failed');
+        alert('Google Login Failed. Please try again.');
     };
 
     return (
@@ -56,9 +69,18 @@ const LoginForm: React.FC = () => {
                             required
                         />
                     </div>
-                    <button type="submit"  className="btn btn-primary w-100 mb-3">Login</button>
+                    <button type="submit" className="btn btn-primary w-100 mb-3">Login</button>
                     <button onClick={handleRegisterClick} className="btn btn-link w-100">If you are not registered, register here</button>
                 </form>
+                <div className="text-center mt-4">
+                    <p>Or sign in with:</p>
+                    <div className="d-flex justify-content-center">
+                        <GoogleLogin
+                            onSuccess={handleGoogleLoginSuccess}
+                            onError={handleGoogleLoginError}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

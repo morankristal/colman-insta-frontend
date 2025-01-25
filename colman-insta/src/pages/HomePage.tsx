@@ -19,6 +19,9 @@ const HomePage: React.FC = () => {
         username: string;
         profilePicture: string;
     } | null>(null);
+    
+    const [searchResults, setSearchResults] = useState<string[]>([]);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -48,15 +51,23 @@ const HomePage: React.FC = () => {
         }
     };
 
+    const handleSearch = async (username: string) => {
+        try {
+            const results = await userService.searchUsers(username);
+            setSearchResults(results);
+        } catch (error) {
+            console.error("Error fetching search results:", error);
+        }
+    };
+
     return (
         <div className="bg-light min-vh-100">
             <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
                 <div className="container-fluid">
                     <div className="d-flex justify-content-between w-100 align-items-center">
                         <SearchBar
-                            onSearch={(username) =>
-                                console.log(`Searching for user: ${username}`)
-                            }
+                            onSearch={handleSearch}
+                            searchResults={searchResults}
                         />
                         <div className="d-flex align-items-center">
                             {loggedInUser && (

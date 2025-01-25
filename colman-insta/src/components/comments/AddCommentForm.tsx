@@ -24,7 +24,7 @@ const AddCommentForm: React.FC<AddCommentFormProps> = ({ postId, onCommentAdded 
             setCommentText('');
             onCommentAdded(newComment);
         } catch (err) {
-            setError('Failed to add comment. Please try again.');
+            setError('Failed to add comment. Please try again. error: ' + err);
         } finally {
             setIsSubmitting(false);
         }
