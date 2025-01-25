@@ -24,6 +24,7 @@ const RegisterForm: React.FC = () => {
         try {
             const response = await register(userDetails); // שימוש בשירות
             console.log('Register successful:', response);
+            navigate("/login");
             alert('Register successful!');
         } catch (error: any) {
             if (error.response) {

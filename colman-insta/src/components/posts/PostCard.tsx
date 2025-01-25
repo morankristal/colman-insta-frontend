@@ -50,10 +50,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                     ...post,
                     likes: newLikeState ? [...post.likes, currentUser._id] : post.likes.filter(id => id !== currentUser._id),
                 };
-                setUserPosts &&
-                setUserPosts((prevPosts) =>
-                    prevPosts.map((p) => (p._id === post._id ? updatedPost : p))
-                );
+                if (setUserPosts) {
+                    setUserPosts((prevPosts) =>
+                        prevPosts.map((p) => (p._id === post._id ? updatedPost : p))
+                    );
+                }
                 await postService.likePost(post._id!, currentUser._id);
             } catch (err) {
                 console.error("Error handling like:", err);
@@ -79,7 +80,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
         try {
             await postService.deletePost(post._id!);
             // Update the posts list after deletion
-            setUserPosts && setUserPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+            if (setUserPosts) {
+                setUserPosts((prevPosts) => prevPosts.filter((p) => p._id !== post._id));
+            }
             alert("Post deleted successfully.");
         } catch (err) {
             console.error("Error deleting post:", err);

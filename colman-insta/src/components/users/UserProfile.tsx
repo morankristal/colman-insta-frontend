@@ -13,7 +13,7 @@ interface DecodedToken {
     exp: number;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ username }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ username }) => { 
     const navigate = useNavigate();
 
     const getCurrentUserFromCookie = () => {

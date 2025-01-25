@@ -50,11 +50,15 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
                     const user = await userService.getUserById(senderId!);
                     senderNames[senderId!] = user.username;
                 }
-
                 setUserNames(senderNames);
-            } catch (err) {
-                setError("Failed to fetch user posts or user names.");
-                console.error(err);
+
+            } catch (err: any) {
+                if (err.response && err.response.status === 404) {
+                    setUserPosts([]); 
+                } else {
+                    setError("Failed to fetch user posts or user names.");
+                    console.error(err);
+                }
             } finally {
                 setLoading(false);
             }
