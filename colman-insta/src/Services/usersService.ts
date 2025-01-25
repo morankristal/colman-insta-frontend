@@ -38,6 +38,19 @@ export const getUserByName = (username: string): Promise<UserData> => {
     });
 };
 
+export const searchUsers = (username: string): Promise<string[]> => {
+    return new Promise<string[]>((resolve, reject) => {
+        apiClient.get<UserData[]>(`users/search/${username}`)
+            .then((res) => {
+                const usernames = res.data.map(user => user.username);
+                resolve(usernames);
+            })
+            .catch((err) => {
+                reject(err);
+            });
+    });
+};
+
 export const updateUser = (user: UserData): Promise<UserData> => {
     return new Promise<UserData>((resolve, reject) => {
         apiClient.put<UserData>(`users/${user._id}`, user)
@@ -62,4 +75,4 @@ export const deleteUser = (id: string): Promise<UserData> => {
     });
 };
 
-export default { getAllUsers, getUserById,getUserByName, updateUser, deleteUser };
+export default { getAllUsers, getUserById, getUserByName, searchUsers, updateUser, deleteUser };

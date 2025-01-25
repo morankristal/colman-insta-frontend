@@ -16,7 +16,7 @@ const DeleteCommentButton: React.FC<DeleteCommentButtonProps> = ({ commentId, on
                 await deleteComment(commentId);
                 onDeleteSuccess();
             } catch (error) {
-                alert('Failed to delete the comment. Please try again.');
+                alert('Failed to delete the comment. Please try again. error: ' + error);
             } finally {
                 setIsDeleting(false);
             }
