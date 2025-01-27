@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage.tsx";
 import CreatePost from "./components/posts/CreatePost.tsx";
 import EditPost from "./components/posts/EditPost.tsx";
 import DeletePostButton from "./components/posts/DeletePostButton.tsx";
+import AskPage from "./pages/AskPage.tsx";
 
 const queryClient = new QueryClient();
 
@@ -21,12 +22,14 @@ function App() {
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
                     <Route element={<ProtectedRoute />}>
+                        <Route path="/" element={<HomePage />} />
                         <Route path="/homePage" element={<HomePage />} />
                         <Route path="/user/:username" element={<UserProfilePage />} />
                         <Route path="/edit-profile/:id" element={<EditProfile />} />
                         <Route path="/create-post" element={<CreatePost/>} />
                         <Route path="/edit-post/:id" element={<EditPost/>} />
                         <Route path="/delte-post/:postId" element={<DeletePostButton/>} />
+                        <Route path="/ai-create-post" element={<AskPage/>} />
                     </Route>
                 </Routes>
             </BrowserRouter>

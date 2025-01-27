@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
         username: string;
         profilePicture: string;
     } | null>(null);
-    
+
     const [searchResults, setSearchResults] = useState<string[]>([]);
 
     const navigate = useNavigate();
@@ -111,6 +111,19 @@ const HomePage: React.FC = () => {
                     }}
                 >
                     <i className="bi bi-plus-lg fs-4 text-white"></i>
+                </button>
+            </Link>
+            <Link to="/ai-create-post">
+                <button
+                    className="btn btn-success rounded-circle position-fixed shadow ai-post-btn"
+                    style={{
+                        width: "60px",
+                        height: "60px",
+                        bottom: "90px",
+                        right: "16px",
+                    }}
+                >
+                    <i className="bi bi-robot fs-4 text-white"></i>
                 </button>
             </Link>
         </div>

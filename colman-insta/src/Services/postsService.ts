@@ -1,5 +1,5 @@
 import apiClient from "./api-client";
-import {PostData} from "../types/postTypes.ts";
+import { PostData } from "../types/postTypes.ts";
 
 export const getAllPosts = (): Promise<PostData[]> => {
     return new Promise<PostData[]>((resolve, reject) => {
@@ -33,7 +33,11 @@ export const getPostsBySender = (senderId: string): Promise<PostData[]> => {
                 resolve(res.data);
             })
             .catch((err) => {
-                reject(err);
+                if (err.response && err.response.status === 404) {
+                    resolve([]);
+                } else {
+                    reject(err);
+                }
             });
     });
 };
@@ -54,7 +58,7 @@ export const createPost = (postData: FormData): Promise<PostData> => {
     });
 };
 
-export const updatePost = (_id:string, post: FormData): Promise<PostData> => {
+export const updatePost = (_id: string, post: FormData): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
         apiClient.put<PostData>(`posts/${_id}`, post)
             .then((res) => {
