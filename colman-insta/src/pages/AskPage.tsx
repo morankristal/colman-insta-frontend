@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import askService from '../Services/askService';
-import { format } from "path";
-
 
 const AskPage: React.FC = () => {
     const [prompt, setPrompt] = useState("");
