@@ -104,10 +104,12 @@ const HomePage: React.FC = () => {
             </div>
             <Link to="/create-post">
                 <button
-                    className="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 shadow"
+                    className="btn btn-primary rounded-circle position-fixed shadow"
                     style={{
                         width: "50px",
                         height: "50px",
+                        bottom: "16px",
+                        right: "16px",
                     }}
                 >
                     <i className="bi bi-plus-lg fs-4 text-white"></i>
@@ -115,11 +117,11 @@ const HomePage: React.FC = () => {
             </Link>
             <Link to="/ai-create-post">
                 <button
-                    className="btn btn-success rounded-circle position-fixed shadow ai-post-btn"
+                    className="btn btn-success rounded-circle position-fixed shadow"
                     style={{
-                        width: "60px",
-                        height: "60px",
-                        bottom: "90px",
+                        width: "50px",
+                        height: "50px",
+                        bottom: "80px",
                         right: "16px",
                     }}
                 >

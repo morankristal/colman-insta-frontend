@@ -1,37 +1,3 @@
-// import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-
-// interface SearchBarProps {
-//     onSearch: (username: string) => void;
-// }
-
-// const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-//     const [username, setUsername] = useState('');
-//     const navigate = useNavigate();
-
-//     const handleSearch = (e: React.FormEvent) => {
-//         e.preventDefault();
-//         onSearch(username); // Trigger the search in the parent component
-//         navigate(`/user/${username}`); // Navigate to the user profile page
-//     };
-
-//     return (
-//         <form className="d-flex w-50 mx-auto" onSubmit={handleSearch}>
-//             <input
-//                 className="form-control me-2"
-//                 type="search"
-//                 placeholder="חפש משתמש"
-//                 aria-label="Search"
-//                 value={username}
-//                 onChange={(e) => setUsername(e.target.value)} // Update username as the user types
-//             />
-//             <button className="btn btn-outline-success" type="submit">חפש</button>
-//         </form>
-//     );
-// };
-
-// export default SearchBar;
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
