@@ -9,18 +9,36 @@ const RegisterForm: React.FC = () => {
         password: '',
         profilePicture: '',
     });
+    const [passwordError, setPasswordError] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
+        if (name === "password") {
+            validatePassword(value);
+        }
         setUserDetails((prevDetails) => ({
             ...prevDetails,
             [name]: value,
         }));
     };
 
+    const validatePassword = (password: string) => {
+        const minLength = 6;
+        const hasNumber = /\d/.test(password);
+        const hasLetter = /[a-zA-Z]/.test(password);
+        if (password.length < minLength) {
+            setPasswordError("Password must be at least 6 characters long.");
+        } else if (!hasNumber || !hasLetter) {
+            setPasswordError("Password must contain at least one letter and one number.");
+        } else {
+            setPasswordError('');
+        }
+    };
+
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (passwordError) return;
         try {
             const response = await register(userDetails); // שימוש בשירות
             console.log('Register successful:', response);
@@ -79,6 +97,7 @@ const RegisterForm: React.FC = () => {
                             onChange={handleInputChange}
                             required
                         />
+                        {passwordError && <small className="text-danger">{passwordError}</small>}
                     </div>
                     <div className="mb-3">
                         <label className="form-label">Profile Picture URL</label>
@@ -91,7 +110,7 @@ const RegisterForm: React.FC = () => {
                             required
                         />
                     </div>
-                    <button type="submit" className="btn btn-primary w-100 mb-3">Register</button>
+                    <button type="submit" className="btn btn-primary w-100 mb-3" disabled={!!passwordError}>Register</button>
                     <button onClick={handleBackToLogin} className="btn btn-link w-100">Back to Login</button>
                 </form>
             </div>
