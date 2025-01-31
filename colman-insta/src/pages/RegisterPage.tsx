@@ -1,10 +1,9 @@
 import React from 'react';
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from '../components/users/RegisterForm.tsx';
 
 const RegisterPage: React.FC = () => {
     return (
         <div>
-            <h1>Register Page</h1>
             <RegisterForm />
         </div>
     );
