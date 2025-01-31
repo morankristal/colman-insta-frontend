@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "prod": "NODE_ENV=production rm -rf dist && vite build && vite preview",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
