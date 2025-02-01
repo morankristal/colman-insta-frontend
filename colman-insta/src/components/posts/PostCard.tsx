@@ -121,7 +121,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                     </div>
                     {post.image && (
                         <img
-                            src={`http://localhost:3000/uploads/${post.image}`}
+                            src={`https://localhost/uploads/${post.image}`}
                             alt="Post"
                             className="card-img-top"
                             style={{
