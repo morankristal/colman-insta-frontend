@@ -3,7 +3,7 @@ import { UserData } from "../types/userTypes.ts"  // הנחה שמבנה ה-User
 
 export const getAllUsers = (): Promise<UserData[]> => {
     return new Promise<UserData[]>((resolve, reject) => {
-        apiClient.get<UserData[]>("users")
+        apiClient.get<UserData[]>("/users")
             .then((res) => {
                 const users: UserData[] = res.data;
                 resolve(users);
@@ -16,7 +16,7 @@ export const getAllUsers = (): Promise<UserData[]> => {
 
 export const getUserById = (id: string): Promise<UserData> => {
     return new Promise<UserData>((resolve, reject) => {
-        apiClient.get<UserData>(`users/${id}`)
+        apiClient.get<UserData>(`/users/${id}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -40,7 +40,7 @@ export const getUserByName = (username: string): Promise<UserData> => {
 
 export const searchUsers = (username: string): Promise<string[]> => {
     return new Promise<string[]>((resolve, reject) => {
-        apiClient.get<UserData[]>(`users/search/${username}`)
+        apiClient.get<UserData[]>(`/users/search/${username}`)
             .then((res) => {
                 const usernames = res.data.map(user => user.username);
                 resolve(usernames);
@@ -53,7 +53,7 @@ export const searchUsers = (username: string): Promise<string[]> => {
 
 export const updateUser = (user: UserData): Promise<UserData> => {
     return new Promise<UserData>((resolve, reject) => {
-        apiClient.put<UserData>(`users/${user._id}`, user)
+        apiClient.put<UserData>(`/users/${user._id}`, user)
             .then((res) => {
                 resolve(res.data);
             })
@@ -65,7 +65,7 @@ export const updateUser = (user: UserData): Promise<UserData> => {
 
 export const deleteUser = (id: string): Promise<UserData> => {
     return new Promise<UserData>((resolve, reject) => {
-        apiClient.delete<UserData>(`users/${id}`)
+        apiClient.delete<UserData>(`/users/${id}`)
             .then((res) => {
                 resolve(res.data);
             })
