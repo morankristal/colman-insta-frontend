@@ -2,7 +2,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import autoService from "./authService.ts";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
+// const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const backendUrl = "https://node25.cs.colman.ac.il";
 function backEnv(): string {
     return backendUrl;
 }
@@ -14,7 +15,6 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
-        console.log("Axios Base URL:", apiClient.defaults.baseURL);
         const originalRequest = error.config;
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
