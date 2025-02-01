@@ -2,8 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import autoService from "./authService.ts";
 
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 function backEnv(): string {
-    return process.env.NODE_ENV === 'production' ? 'https://localhost' : 'http://localhost:3000';
+    return process.env.NODE_ENV = backendUrl;
 }
 
 const apiClient = axios.create({
@@ -32,4 +33,3 @@ apiClient.interceptors.response.use(
     }
 );
 export default apiClient;
-
