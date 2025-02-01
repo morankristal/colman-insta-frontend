@@ -2,8 +2,9 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import autoService from "./authService.ts";
 
-const backendUrl = import.meta.env.VITE_BACKEND_URL;
 console.log(import.meta.env.VITE_BACKEND_URL);
+
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 function backEnv(): string {
     return backendUrl;
 }
@@ -12,6 +13,7 @@ const apiClient = axios.create({
     baseURL: backEnv(),
     withCredentials: true,
 });
+console.log("Axios Base URL:", apiClient.defaults.baseURL);
 apiClient.interceptors.response.use(
     (response) => response,
     async (error) => {
