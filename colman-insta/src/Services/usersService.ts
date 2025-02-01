@@ -28,7 +28,7 @@ export const getUserById = (id: string): Promise<UserData> => {
 
 export const getUserByName = (username: string): Promise<UserData> => {
     return new Promise<UserData>((resolve, reject) => {
-        apiClient.get<UserData>(`users/username/${username}`)
+        apiClient.get<UserData>(`users/${username}`)
             .then((res) => {
                 resolve(res.data);
             })
