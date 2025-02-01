@@ -30,7 +30,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, searchResults }) => {
     };
 
     const handleUserClick = (user: string) => {
-        navigate(`/user/${user}`); 
+        navigate(`/profile/${user}`);
     };
 
     return (

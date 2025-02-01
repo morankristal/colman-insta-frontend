@@ -47,7 +47,7 @@ const HomePage: React.FC = () => {
 
     const handleGoToProfile = () => {
         if (loggedInUser) {
-            navigate(`/user/${loggedInUser.username}`);
+            navigate(`/profile/${loggedInUser.username}`);
         }
     };
 
