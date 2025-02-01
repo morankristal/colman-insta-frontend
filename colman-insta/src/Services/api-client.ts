@@ -5,7 +5,7 @@ import autoService from "./authService.ts";
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 console.log(import.meta.env.VITE_BACKEND_URL);
 function backEnv(): string {
-    return process.env.NODE_ENV = backendUrl;
+    return backendUrl;
 }
 
 const apiClient = axios.create({
