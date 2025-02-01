@@ -121,7 +121,8 @@ const PostCard: React.FC<PostCardProps> = ({ post, userNames, currentUser, setUs
                     </div>
                     {post.image && (
                         <img
-                            src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.image}`}
+                            // src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${post.image}`}
+                            src={`https://193.106.55.185/uploads/${post.image}`}
                             alt="Post"
                             className="card-img-top"
                             style={{
