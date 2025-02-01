@@ -8,7 +8,8 @@ function backEnv(): string {
 }
 
 const apiClient = axios.create({
-    baseURL: backEnv(),
+    // baseURL: backEnv(),
+    baseURL: `${backEnv()}/`,
     withCredentials: true,
 });
 apiClient.interceptors.response.use(
