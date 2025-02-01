@@ -16,7 +16,7 @@ export const getAllComments = (): Promise<CommentData[]> => {
 
 export const getCommentById = (id: string): Promise<CommentData> => {
     return new Promise<CommentData>((resolve, reject) => {
-        apiClient.get<CommentData>(`comments/${id}`)
+        apiClient.get<CommentData>(`/comments/${id}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -28,7 +28,7 @@ export const getCommentById = (id: string): Promise<CommentData> => {
 
 export const getCommentsByPost = (postId: string): Promise<CommentData[]> => {
     return new Promise<CommentData[]>((resolve, reject) => {
-        apiClient.get<CommentData[]>(`comments/getByPost/${postId}`)
+        apiClient.get<CommentData[]>(`/comments/getByPost/${postId}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -40,7 +40,7 @@ export const getCommentsByPost = (postId: string): Promise<CommentData[]> => {
 
 export const createComment = (commentData: { content: string; post: string }): Promise<CommentData> => {
     return new Promise<CommentData>((resolve, reject) => {
-        apiClient.post<CommentData>("comments", commentData)
+        apiClient.post<CommentData>("/comments", commentData)
             .then((res) => {
                 resolve(res.data);
             })
@@ -52,7 +52,7 @@ export const createComment = (commentData: { content: string; post: string }): P
 
 export const updateComment = (id: string, commentData: { content: string }): Promise<CommentData> => {
     return new Promise<CommentData>((resolve, reject) => {
-        apiClient.put<CommentData>(`comments/${id}`, commentData)
+        apiClient.put<CommentData>(`/comments/${id}`, commentData)
             .then((res) => {
                 resolve(res.data);
             })
@@ -64,7 +64,7 @@ export const updateComment = (id: string, commentData: { content: string }): Pro
 
 export const deleteComment = (id: string): Promise<CommentData> => {
     return new Promise<CommentData>((resolve, reject) => {
-        apiClient.delete<CommentData>(`comments/${id}`)
+        apiClient.delete<CommentData>(`/comments/${id}`)
             .then((res) => {
                 resolve(res.data);
             })

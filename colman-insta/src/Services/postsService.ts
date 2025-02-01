@@ -16,7 +16,7 @@ export const getAllPosts = (): Promise<PostData[]> => {
 
 export const getPostById = (id: string): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
-        apiClient.get<PostData>(`posts/${id}`)
+        apiClient.get<PostData>(`/posts/${id}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -28,7 +28,7 @@ export const getPostById = (id: string): Promise<PostData> => {
 
 export const getPostsBySender = (senderId: string): Promise<PostData[]> => {
     return new Promise<PostData[]>((resolve, reject) => {
-        apiClient.get<PostData[]>(`posts/getBySender/${senderId}`)
+        apiClient.get<PostData[]>(`/posts/getBySender/${senderId}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -44,7 +44,7 @@ export const getPostsBySender = (senderId: string): Promise<PostData[]> => {
 
 export const createPost = (postData: FormData): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
-        apiClient.post<PostData>("posts", postData, {
+        apiClient.post<PostData>("/posts", postData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -60,7 +60,7 @@ export const createPost = (postData: FormData): Promise<PostData> => {
 
 export const updatePost = (_id: string, post: FormData): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
-        apiClient.put<PostData>(`posts/${_id}`, post)
+        apiClient.put<PostData>(`/posts/${_id}`, post)
             .then((res) => {
                 resolve(res.data);
             })
@@ -72,7 +72,7 @@ export const updatePost = (_id: string, post: FormData): Promise<PostData> => {
 
 export const deletePost = (id: string): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
-        apiClient.delete<PostData>(`posts/${id}`)
+        apiClient.delete<PostData>(`/posts/${id}`)
             .then((res) => {
                 resolve(res.data);
             })
@@ -83,7 +83,7 @@ export const deletePost = (id: string): Promise<PostData> => {
 };
 export const likePost = (postId: string, userId: string): Promise<PostData> => {
     return new Promise<PostData>((resolve, reject) => {
-        apiClient.post<PostData>(`posts/${postId}/like`, { userId })
+        apiClient.post<PostData>(`/posts/${postId}/like`, { userId })
             .then((res) => {
                 resolve(res.data);
             })
@@ -95,7 +95,7 @@ export const likePost = (postId: string, userId: string): Promise<PostData> => {
 
 export const getLikedPosts = (userId: string): Promise<PostData[]> => {
     return new Promise<PostData[]>((resolve, reject) => {
-        apiClient.get<PostData[]>(`posts/liked?userId=${userId}`)
+        apiClient.get<PostData[]>(`/posts/liked?userId=${userId}`)
             .then((res) => {
                 resolve(res.data);
             })

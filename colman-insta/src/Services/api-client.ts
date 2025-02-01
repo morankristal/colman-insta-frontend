@@ -2,8 +2,7 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import autoService from "./authService.ts";
 
-// const backendUrl = import.meta.env.VITE_BACKEND_URL;
-const backendUrl = "https://node25.cs.colman.ac.il";
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 function backEnv(): string {
     return backendUrl;
 }
