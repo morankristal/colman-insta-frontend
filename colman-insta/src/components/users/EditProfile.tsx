@@ -24,6 +24,7 @@ const EditProfile: React.FC = () => {
                     profilePicture: user.profilePicture,
                 });
                 setIsLoading(false);
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (err) {
                 setError('Failed to load user data.');
                 setIsLoading(false);
@@ -41,7 +42,8 @@ const EditProfile: React.FC = () => {
         e.preventDefault();
         try {
             await userService.updateUser({_id:id, ...formData});
-            navigate(`/user/${formData.username}`);
+            navigate(`/profile/${formData.username}`);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             setError('Failed to update user data.');
         }
